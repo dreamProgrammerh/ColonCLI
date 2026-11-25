@@ -15,9 +15,9 @@ Both modes map to the same underlying options and flags aka they are aliases, no
 #define CCLI colc
 
 #define CCLI_POS_ARGS(X, Y) \
-    X(STRING,    input,  "input",    "Input file",  "Path to the source file to process") \
-    X(STRING,    output, "output",   "Output file", "Path to the generated output file") \
-    Y(8, STRING, files,  "file",     "Extra files", "Additional input files to bundle")
+    X(STRING,    input,  "input",  "Input file",  "Path to the source file to process") \
+    X(STRING,    output, "output", "Output file", "Path to the generated output file") \
+    Y(8, STRING, files,  "file",   "Extra files", "Additional input files to bundle")
 
 #define CCLI_OPT_ARGS(X, Y) \
     X(STRING, out_dir, ".",    Y("o", "out", "dir"), "Output dir", "Directory for generated files") \
@@ -38,9 +38,9 @@ Both modes map to the same underlying options and flags aka they are aliases, no
 **Help message output**:
 
 ```txt
-colc - Colon CLI Argument Parser
+colc - Colon CLI
 
-Usage: colc [OPTIONS] [ARGS...]
+Usage: colc [OPTIONS] :: [ARGS...]
 
 [Options]
   o:out:dir:  STRING  Output dir  ["."]     Directory for generated files
@@ -195,20 +195,20 @@ Both (Cursed):
 
 You can define these before `#include "coloncli.h"` to customize behavior:
 
-| Macro               | Default                               | Valid values | Purpose                                            |
-| ------------------- | ------------------------------------- | ------------ | -------------------------------------------------- |
-| `CCLI_LEGACY`       | `0`                                   | `0`, `1`     | Start in **legacy mode** (`1`) or colon mode (`0`) |
-| `CCLI_POSITIONAL`   | `0`                                   | `0`, `1`     | Start in **positional mode** (`1`) or not (`0`)    |
-| `CCLI_NAME`         | `CCLI` stringified                    | Any string   | Program **name** in help header/usage              |
-| `CCLI_HEADER`       | `"$name - Colon CLI Argument Parser"` | Any string   | Help **title** line                                |
-| `CCLI_USAGE`        | `"Usage: $name [OPTIONS] [ARGS...]"`  | Any string   | Help **usage** line                                |
-| `CCLI_DESCRIPTION`  | `""`                                  | Any string   | Help **description**                               |
-| `CCLI_EXAMPLE`      | `""`                                  | Any string   | Help **examples** section                          |
-| `CCLI_HELP_TYPE`    | `1`                                   | `0`, `1`     | Show **type** column in help                       |
-| `CCLI_HELP_DEFAULT` | `1`                                   | `0`, `1`     | Show **default** column in help                    |
-| `CCLI_HELP_LABEL`   | `1`                                   | `0`, `1`     | Show **label** column in help                      |
-| `CCLI_HELP_DESC`    | `1`                                   | `0`, `1`     | Show **description** column in help                |
-| `CCLI_HELP_ALIGN`   | `1`                                   | `0`, `1`     | Enable column **alignment** padding                |
+| Macro               | Default                                 | Valid values | Purpose                                            |
+| ------------------- | --------------------------------------- | ------------ | -------------------------------------------------- |
+| `CCLI_LEGACY`       | `0`                                     | `0`, `1`     | Start in **legacy mode** (`1`) or colon mode (`0`) |
+| `CCLI_POSITIONAL`   | `0`                                     | `0`, `1`     | Start in **positional mode** (`1`) or not (`0`)    |
+| `CCLI_NAME`         | `CCLI` stringified                      | Any string   | Program **name** in help header/usage              |
+| `CCLI_HEADER`       | `"$name - Colon CLI"` | Any string      | Help **title** line                                |
+| `CCLI_USAGE`        | `"Usage: $name [OPTIONS] :: [ARGS...]"` | Any string   | Help **usage** line                                |
+| `CCLI_DESCRIPTION`  | `""`                                    | Any string   | Help **description**                               |
+| `CCLI_EXAMPLE`      | `""`                                    | Any string   | Help **examples** section                          |
+| `CCLI_HELP_TYPE`    | `1`                                     | `0`, `1`     | Show **type** column in help                       |
+| `CCLI_HELP_DEFAULT` | `1`                                     | `0`, `1`     | Show **default** column in help                    |
+| `CCLI_HELP_LABEL`   | `1`                                     | `0`, `1`     | Show **label** column in help                      |
+| `CCLI_HELP_DESC`    | `1`                                     | `0`, `1`     | Show **description** column in help                |
+| `CCLI_HELP_ALIGN`   | `1`                                     | `0`, `1`     | Enable column **alignment** padding                |
 
 ## Macro reference
 
