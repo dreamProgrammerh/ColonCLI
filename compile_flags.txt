@@ -1,0 +1,8 @@
+-xc
+-std=c99
+-Iinclude
+-Wall
+-Wextra
+-Wpedantic
+-Wno-empty-translation-unit
+-Wno-unused-function
