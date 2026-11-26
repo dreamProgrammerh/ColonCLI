@@ -64,7 +64,7 @@ Usage: colc [OPTIONS] :: [ARGS...]
 ## Features
 
 - **Single header**: just `#include "coloncli.h"`.
-- **Zero dependencies**: pure C11, no standard library only just stdarg.h, limits.h headers.
+- **Zero dependencies**: pure C99, no standard library only stdarg.h, limits.h headers.
 - **Colon mode**:
   - `key:value`, `key: value`
   - `k:value`, `k: value`
@@ -94,7 +94,7 @@ Usage: colc [OPTIONS] :: [ARGS...]
 Colon CLI is header-only. Compile your `main.c` as usual.
 
 ```sh
-gcc -std=c11 -Iinclude src/main.c -o myapp
+gcc -std=c99 -Iinclude src/main.c -o myapp
 ```
 
 ## Quick start
