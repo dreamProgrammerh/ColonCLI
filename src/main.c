@@ -1,22 +1,22 @@
 #define CCLI colc
 
 #define CCLI_POS_ARGS(X, Y) \
-    X(STRING, input,  "input",   "Input file",  "Path to the source file to process") \
-    X(STRING, output, "output",  "Output file", "Path to the generated output file") \
-    Y(8, STRING, files,  "file", "Extra files", "Additional input files to bundle")
+    X(   STRING, input,  "input",  "Input file",  "Path to the source file to process") \
+    X(   STRING, output, "output", "Output file", "Path to the generated output file") \
+    Y(8, STRING, files,  "file",   "Extra files", "Additional input files to bundle")
 
-#define CCLI_OPT_ARGS(X, Y) \
-    X(STRING, out_dir, ".", Y("o", "out", "dir"), "Output dir", "Directory for generated files") \
-    X(STRING, format,  "json", Y("f", "format"), "Format",      "Output format: json, yaml, toml") \
-    X(UINT,   depth,   4,   Y("d", "depth"), "Max depth",       "Maximum recursion depth") \
-    X(UINT,   limit,   100, Y("l", "limit"), "Limit",           "Maximum number of items to process")
+#define CCLI_OPT_ARGS(X) \
+    X(STRING, out_dir, ".",    ("o", "out", "dir"), "Output dir", "Directory for generated files") \
+    X(STRING, format,  "json", ("f", "format"),     "Format",     "Output format: json, yaml, toml") \
+    X(UINT,   depth,   4,      ("d", "depth"),      "Max depth",  "Maximum recursion depth") \
+    X(UINT,   limit,   100,    ("l", "limit"),      "Limit",      "Maximum number of items to process")
 
-#define CCLI_BOL_ARGS(X, Y) \
-    X(help,      FALSE, Y("h", "help"),      "Help",      "Show this help message") \
-    X(version,   FALSE, Y("v", "version"),   "Version",   "Show version information") \
-    X(force,     FALSE, Y("F", "force"),     "Force",     "Overwrite existing output files") \
-    X(recursive, FALSE, Y("r", "recursive"), "Recursive", "Process directories recursively") \
-    X(verbose,   FALSE, Y("V", "verbose"),   "Verbose",   "Print detailed processing info")
+#define CCLI_BOL_ARGS(X) \
+    X(help,      FALSE, ("h", "help"),      "Help",      "Show this help message") \
+    X(version,   FALSE, ("v", "version"),   "Version",   "Show version information") \
+    X(force,     FALSE, ("F", "force"),     "Force",     "Overwrite existing output files") \
+    X(recursive, FALSE, ("r", "recursive"), "Recursive", "Process directories recursively") \
+    X(verbose,   FALSE, ("V", "verbose"),   "Verbose",   "Print detailed processing info")
 
 #include "coloncli.h"
 #include <stdio.h>

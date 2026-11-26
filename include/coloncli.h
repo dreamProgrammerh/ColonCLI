@@ -15,6 +15,8 @@
 #define _S(x) __S(x)
 #define __R(x) x
 #define _R(x) __R(x)
+#define __E(...) __VA_ARGS__
+#define _E(...) __E(__VA_ARGS__)
 #define _A_(pre, suf) _C(pre, CCLI, suf)
 
 #ifndef CCLI_LEGACY
@@ -153,13 +155,13 @@ struct _A_(,_args_t) {
 
     #ifdef CCLI_OPT_ARGS
     #   define _X(type, prop, ...) CCLI_TYPE(type) prop;
-    CCLI_OPT_ARGS(_X, CCLI_Y)
+    CCLI_OPT_ARGS(_X)
     #   undef _X
     #endif
 
     #ifdef CCLI_BOL_ARGS
     #   define _X(prop, ...) unsigned char prop;
-    CCLI_BOL_ARGS(_X, CCLI_Y)
+    CCLI_BOL_ARGS(_X)
     #   undef _X
     #endif
 
@@ -627,13 +629,13 @@ _A_(,_args_t) _A_(,_default)(void) {
 
     #ifdef CCLI_OPT_ARGS
     #   define _X(type, prop, default, ...) d.CCLI_ASSIGN(type, prop, default);
-    CCLI_OPT_ARGS(_X, CCLI_Y)
+    CCLI_OPT_ARGS(_X)
     #   undef _X
     #endif
 
     #ifdef CCLI_BOL_ARGS
     #   define _X(prop, default, ...) d.prop = CCLI_BOOL(default);
-    CCLI_BOL_ARGS(_X, CCLI_Y)
+    CCLI_BOL_ARGS(_X)
     #   undef _X
     #endif
 
@@ -706,14 +708,14 @@ unsigned int _A_(,_parse)(_A_(,_args_t)* cli, char* err_buf, unsigned int err_ca
 
         #ifdef CCLI_OPT_ARGS
         #   define _X(type, prop, default, keys, ...) \
-            if (_A_(_,_colon_oneof)(key, key_len, keys, CCLI_VA_COUNT(keys))) { \
+            if (_A_(_,_colon_oneof)(key, key_len, _Y(__E(__E keys)), __E(CCLI_VA_COUNT keys))) { \
                 cli->prop = CCLI_READ(type)(cli, key, key_len, 0, val, val_len); \
                 if (cli->ok) continue; \
                 goto end; \
             }
 
         if (colon_opt == CCLI_O_KEY) {
-            CCLI_OPT_ARGS(_X, _Y);
+            CCLI_OPT_ARGS(_X);
 
             _A_(_,_report)(cli, "Error: unexpected option '$n'", key, key_len);
             goto end;
@@ -723,7 +725,7 @@ unsigned int _A_(,_parse)(_A_(,_args_t)* cli, char* err_buf, unsigned int err_ca
 
         #ifdef CCLI_BOL_ARGS
         #   define _X(prop, default, keys, ...) \
-            if (_A_(_,_colon_oneof)(bol, bol_len, keys, CCLI_VA_COUNT(keys))) { \
+            if (_A_(_,_colon_oneof)(bol, bol_len, _Y(__E(__E keys)), __E(CCLI_VA_COUNT keys))) { \
                 cli->prop = res; \
                 goto bol_end; \
             }
@@ -737,7 +739,7 @@ unsigned int _A_(,_parse)(_A_(,_args_t)* cli, char* err_buf, unsigned int err_ca
                 if (bol_len == 0) continue;
 
                 const char* bol = key + j;
-                CCLI_BOL_ARGS(_X, _Y);
+                CCLI_BOL_ARGS(_X);
 
                 _A_(_,_report)(cli, res
                     ? "Error: unexpected flag '$n' enable"
@@ -789,7 +791,7 @@ unsigned int _A_(,_parse)(_A_(,_args_t)* cli, char* err_buf, unsigned int err_ca
 
         #ifdef CCLI_OPT_ARGS
         #   define _X(type, prop, default, keys, ...) \
-            if (_A_(_,_legacy_oneof)(sub, sub_len, short_form, keys, CCLI_VA_COUNT(keys))) { \
+            if (_A_(_,_legacy_oneof)(sub, sub_len, short_form, _Y(__E(__E keys)), __E(CCLI_VA_COUNT keys))) { \
                 found = 1; \
                 if (!val) { \
                     i++; \
@@ -814,7 +816,7 @@ unsigned int _A_(,_parse)(_A_(,_args_t)* cli, char* err_buf, unsigned int err_ca
             int found = 0;
 
             for (unsigned int j = 0; j < n; ++j, sub += inc) {
-                CCLI_OPT_ARGS(_X, _Y);
+                CCLI_OPT_ARGS(_X);
 
         #   ifdef CCLI_BOL_ARGS
                 if (found || legacy_opt == CCLI_O_KEY) {
@@ -833,7 +835,7 @@ unsigned int _A_(,_parse)(_A_(,_args_t)* cli, char* err_buf, unsigned int err_ca
 
         #ifdef CCLI_BOL_ARGS
         #   define _X(prop, default, keys, ...) \
-            if (_A_(_,_legacy_oneof)(sub, sub_len, short_form, keys, CCLI_VA_COUNT(keys))) { \
+            if (_A_(_,_legacy_oneof)(sub, sub_len, short_form, _Y(__E(__E keys)), __E(CCLI_VA_COUNT keys))) { \
                 cli->prop = res; \
                 continue; \
             }
@@ -847,7 +849,7 @@ unsigned int _A_(,_parse)(_A_(,_args_t)* cli, char* err_buf, unsigned int err_ca
             const unsigned int n = inc ? key_len : 1;
 
             for (unsigned int j = 0; j < n; ++j, sub += inc) {
-                CCLI_BOL_ARGS(_X, _Y);
+                CCLI_BOL_ARGS(_X);
 
                 _A_(_,_report)(cli, res
                     ? "Error: unexpected flag '$n' enable"
@@ -1012,16 +1014,16 @@ unsigned int _A_(,_help_str)(char* buf, unsigned int cap) {
         unsigned int ol CCLI_SWALLOW_TYPE(, tl) CCLI_SWALLOW_LABEL(, ll) CCLI_SWALLOW_DEFAULT(, dl);
 
     #   define _X(type, prop, default, keys, label, ...) \
-            ol = sizeof(_C(,CCLI_Y_OPT, CCLI_VA_COUNT(keys))(keys)) - 1; if (ol > opt_options_max) opt_options_max = ol; \
+            ol = sizeof(__E(_C(,CCLI_Y_OPT, __E(CCLI_VA_COUNT keys) keys))) - 1; if (ol > opt_options_max) opt_options_max = ol; \
             CCLI_SWALLOW_TYPE(tl = sizeof(#type) - 1; if (tl > opt_type_max) opt_type_max = tl;) \
             CCLI_SWALLOW_LABEL(ll = sizeof(label) - 1; if (ll > opt_label_max) opt_label_max = ll;) \
             CCLI_SWALLOW_DEFAULT(dl = sizeof(#default) - 1; if (dl > opt_default_max) opt_default_max = dl;)
 
-        CCLI_OPT_ARGS(_X, _Y);
+        CCLI_OPT_ARGS(_X);
     }
     #   undef _X
     #   define _X(type, prop, default, keys, label, desc) \
-        CCLI_SB_AP_LIT_PAD("  "_C(,CCLI_Y_OPT, CCLI_VA_COUNT(keys))(keys), opt_options_max + 2) \
+        CCLI_SB_AP_LIT_PAD("  "__E(_C(,CCLI_Y_OPT, __E(CCLI_VA_COUNT keys) keys)), opt_options_max + 2) \
         CCLI_SWALLOW_TYPE(CCLI_SB_AP_LIT_PAD("  "#type, opt_type_max + 2);) \
         CCLI_SWALLOW_LABEL(CCLI_SB_AP_LIT_PAD("  "label, opt_label_max + 2);) \
         CCLI_SWALLOW_DEFAULT(CCLI_SB_AP_LIT_PAD("  ["#default"]", opt_default_max + 4);) \
@@ -1029,7 +1031,7 @@ unsigned int _A_(,_help_str)(char* buf, unsigned int cap) {
         CCLI_SB_AP_LIT("\n");
 
     CCLI_SB_AP_LIT("[Options]\n");
-    CCLI_OPT_ARGS(_X, _Y);
+    CCLI_OPT_ARGS(_X);
     CCLI_SB_AP_LIT("\n");
     #   undef _X
 
@@ -1042,20 +1044,20 @@ unsigned int _A_(,_help_str)(char* buf, unsigned int cap) {
         unsigned int ol CCLI_SWALLOW_LABEL(, ll);
 
     #   define _X(prop, default, keys, label, ...) \
-            ol = sizeof(CCLI_Y_BOL_SET(default, keys)) - 1; if (ol > bol_options_max) bol_options_max = ol; \
+            ol = sizeof(CCLI_Y_BOL_SET(default, __E(__E keys))) - 1; if (ol > bol_options_max) bol_options_max = ol; \
             CCLI_SWALLOW_LABEL(ll = sizeof(label) - 1; if (ll > bol_label_max) bol_label_max = ll;)
-        CCLI_BOL_ARGS(_X, _Y);
+        CCLI_BOL_ARGS(_X);
     }
     #   undef _X
     #   define _X(prop, default, keys, label, desc) \
-        CCLI_SB_AP_LIT_PAD("  "CCLI_Y_BOL_SET(default, keys), bol_options_max + 2) \
+        CCLI_SB_AP_LIT_PAD("  "CCLI_Y_BOL_SET(default, __E(__E keys)), bol_options_max + 2) \
         CCLI_SWALLOW_LABEL(CCLI_SB_AP_LIT_PAD("  "label, bol_label_max + 2);) \
         CCLI_SWALLOW_DEFAULT(CCLI_SB_AP_LIT("  ["CCLI_Y_BOL_CHK(default)"]");) \
         CCLI_SWALLOW_DESC(CCLI_SB_AP_LIT("  "desc);) \
         CCLI_SB_AP_LIT("\n");
 
     CCLI_SB_AP_LIT("[Flags]\n");
-    CCLI_BOL_ARGS(_X, _Y);
+    CCLI_BOL_ARGS(_X);
     CCLI_SB_AP_LIT("\n");
     #   undef _X
 
@@ -1181,7 +1183,7 @@ unsigned int _A_(,_struct_str)(_A_(,_args_t)* cli, char* buf, unsigned int cap) 
         CCLI_SB(type)(&sb, CCLI_EXPEND(type, cli->prop)); \
         CCLI_SB_AP_LIT("\n");
 
-    CCLI_OPT_ARGS(_X, CCLI_Y)
+    CCLI_OPT_ARGS(_X)
     #   undef _X
     #endif
 
@@ -1191,7 +1193,7 @@ unsigned int _A_(,_struct_str)(_A_(,_args_t)* cli, char* buf, unsigned int cap) 
         if (cli->prop) CCLI_SB_AP_LIT("true"); else CCLI_SB_AP_LIT("false"); \
         CCLI_SB_AP_LIT("\n");
 
-    CCLI_BOL_ARGS(_X, CCLI_Y)
+    CCLI_BOL_ARGS(_X)
     #   undef _X
     #endif
 
@@ -1227,6 +1229,8 @@ unsigned int _A_(,_struct_str)(_A_(,_args_t)* cli, char* buf, unsigned int cap) 
 #undef __S
 #undef _S
 #undef __R
+#undef _E
+#undef __E
 #undef _R
 #undef _A_
 

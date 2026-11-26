@@ -283,22 +283,22 @@ All option keys and flag names must be unique across both short and long names. 
 
 **What this means:**
 
-- Two options cannot share the same short key: `Y("d", "dir")` and `Y("d", "depth")` is invalid.
-- Two options cannot share the same long name: `Y("dir")` and `Y("directory")` is fine, but `Y("dir")` appearing twice is invalid.
-- Short keys are case-sensitive: `Y("d")` and `Y("D")` are different symbols - allowed, but discouraged as it is confusing.
-- A short key and a long name can overlap (e.g. `Y("d", "dir")` where `d` is short, `dir` is long) - this is the intended aliasing mechanism.
+- Two options cannot share the same short key: `("d", "dir")` and `("d", "depth")` is invalid.
+- Two options cannot share the same long name: `("dir")` and `("directory")` is fine, but `("dir")` appearing twice is invalid.
+- Short keys are case-sensitive: `("d")` and `("D")` are different symbols - allowed, but discouraged as it is confusing.
+- A short key and a long name can overlap (e.g. `("d", "dir")` where `d` is short, `dir` is long) - this is the intended aliasing mechanism.
 - An option key and a boolean flag name can share the same short character or long string - this is **undefined behavior** and must be avoided.
 
 **Valid example:**
 
 ```c
-#define CCLI_OPT_ARGS(X, Y) \
-    X(STRING, out_dir, ".", Y("d", "dir"), , "Output dir", "description") \
-    X(UINT,   depth,   4,   Y("depth", "D"), "Nest depth", "description")
+#define CCLI_OPT_ARGS(X) \
+    X(STRING, out_dir, ".", ("d", "dir"), "Output dir", "description") \
+    X(UINT,   depth,   4,   ("depth", "D"), "Nest depth", "description")
 
-#define CCLI_BOL_ARGS(X, Y) \
-    X(help,  FALSE, Y("h", "help"),  "Show help",  "description") \
-    X(debug, TRUE,  Y("g", "debug"), "Debug mode", "description")
+#define CCLI_BOL_ARGS(X) \
+    X(help,  FALSE, ("h", "help"),  "Show help",  "description") \
+    X(debug, TRUE,  ("g", "debug"), "Debug mode", "description")
 ```
 
 Here `d`/`dir`, `depth`/`D`, `h`/`help`, `g`/`debug` are all distinct short and long names.
@@ -307,8 +307,8 @@ Here `d`/`dir`, `depth`/`D`, `h`/`help`, `g`/`debug` are all distinct short and 
 
 ```c
 // Invalid: short key 'd' used twice
-X(STRING, out_dir, ".", Y("d", "dir"),   ...)
-X(UINT,   depth,   4,   Y("d", "depth"), ...)
+X(STRING, out_dir, ".", ("d", "dir"),   ...)
+X(UINT,   depth,   4,   ("d", "depth"), ...)
 ```
 
 ---

@@ -19,18 +19,18 @@ Both modes map to the same underlying options and flags aka they are aliases, no
     X(STRING,    output, "output", "Output file", "Path to the generated output file") \
     Y(8, STRING, files,  "file",   "Extra files", "Additional input files to bundle")
 
-#define CCLI_OPT_ARGS(X, Y) \
-    X(STRING, out_dir, ".",    Y("o", "out", "dir"), "Output dir", "Directory for generated files") \
-    X(STRING, format,  "json", Y("f", "format"),     "Format",     "Output format: json, yaml, toml") \
-    X(UINT,   depth,   4,      Y("d", "depth"),      "Max depth",  "Maximum recursion depth") \
-    X(UINT,   limit,   100,    Y("l", "limit"),      "Limit",      "Maximum number of items to process")
+#define CCLI_OPT_ARGS(X) \
+    X(STRING, out_dir, ".",    ("o", "out", "dir"), "Output dir", "Directory for generated files") \
+    X(STRING, format,  "json", ("f", "format"),     "Format",     "Output format: json, yaml, toml") \
+    X(UINT,   depth,   4,      ("d", "depth"),      "Max depth",  "Maximum recursion depth") \
+    X(UINT,   limit,   100,    ("l", "limit"),      "Limit",      "Maximum number of items to process")
 
-#define CCLI_BOL_ARGS(X, Y) \
-    X(help,      FALSE, Y("h", "help"),      "Help",      "Show this help message") \
-    X(version,   FALSE, Y("v", "version"),   "Version",   "Show version information") \
-    X(force,     FALSE, Y("F", "force"),     "Force",     "Overwrite existing output files") \
-    X(recursive, TRUE,  Y("r", "recursive"), "Recursive", "Process directories recursively") \
-    X(verbose,   FALSE, Y("V", "verbose"),   "Verbose",   "Print detailed processing info")
+#define CCLI_BOL_ARGS(X) \
+    X(help,      FALSE, ("h", "help"),      "Help",      "Show this help message") \
+    X(version,   FALSE, ("v", "version"),   "Version",   "Show version information") \
+    X(force,     FALSE, ("F", "force"),     "Force",     "Overwrite existing output files") \
+    X(recursive, TRUE,  ("r", "recursive"), "Recursive", "Process directories recursively") \
+    X(verbose,   FALSE, ("V", "verbose"),   "Verbose",   "Print detailed processing info")
 
 #include "coloncli.h"
 ```
@@ -83,7 +83,7 @@ Usage: colc [OPTIONS] :: [ARGS...]
   - `-no-xyz`, (stack disable)
 - **Dual-mode toggle**: the token `:` switches between modes at runtime.
 - **Positional arguments**: declared with `CCLI_POS_ARGS`, parsed in order.
-- **Array positional arguments**: `Y(type, cap, prop, ...)` for variable-length lists.
+- **Array positional arguments**: `Y(cap, type, prop, ...)` for variable-length lists.
 - **Optional arguments**: declared with `CCLI_OPT_ARGS`, with defaults.
 - **Boolean flags**: declared with `CCLI_BOL_ARGS`, default true/false.
 - **Built-in help and struct printing**: `colc_help_str()` and `colc_struct_str()`.
@@ -107,22 +107,22 @@ In your `main.c` file, before `#include "coloncli.h"`:
 #define CCLI colc
 
 #define CCLI_POS_ARGS(X, Y) \
-    X(STRING, input,  "input",   "Input file",     "Path to the source file to process") \
-    X(STRING, output, "output",  "Output file",    "Path to the generated output file") \
-    Y(8, STRING, files, "file", "Extra files",    "Additional input files to bundle")
+    X(   STRING, input,  "input",  "Input file",  "Path to the source file to process") \
+    X(   STRING, output, "output", "Output file", "Path to the generated output file") \
+    Y(8, STRING, files,  "file",   "Extra files", "Additional input files to bundle")
 
-#define CCLI_OPT_ARGS(X, Y) \
-    X(STRING, out_dir, ".", Y("o", "out", "dir"), "Output dir",  "Directory for generated files") \
-    X(STRING, format,  "json", Y("f", "format"), "Format",        "Output format: json, yaml, toml") \
-    X(UINT,   depth,   4,   Y("d", "depth"), "Max depth",        "Maximum recursion depth") \
-    X(UINT,   limit,   100, Y("l", "limit"), "Limit",            "Maximum number of items to process")
+#define CCLI_OPT_ARGS(X) \
+    X(STRING, out_dir, ".",    ("o", "out", "dir"), "Output dir", "Directory for generated files") \
+    X(STRING, format,  "json", ("f", "format"),     "Format",     "Output format: json, yaml, toml") \
+    X(UINT,   depth,   4,      ("d", "depth"),      "Max depth",  "Maximum recursion depth") \
+    X(UINT,   limit,   100,    ("l", "limit"),      "Limit",      "Maximum number of items to process")
 
-#define CCLI_BOL_ARGS(X, Y) \
-    X(help,      FALSE, Y("h", "help"),      "Help",          "Show this help message") \
-    X(version,   FALSE, Y("v", "version"),   "Version",       "Show version information") \
-    X(force,     FALSE, Y("F", "force"),     "Force",         "Overwrite existing output files") \
-    X(recursive, FALSE, Y("r", "recursive"), "Recursive",     "Process directories recursively") \
-    X(verbose,   FALSE, Y("V", "verbose"),   "Verbose",       "Print detailed processing info")
+#define CCLI_BOL_ARGS(X) \
+    X(help,      FALSE, ("h", "help"),      "Help",      "Show this help message") \
+    X(version,   FALSE, ("v", "version"),   "Version",   "Show version information") \
+    X(force,     FALSE, ("F", "force"),     "Force",     "Overwrite existing output files") \
+    X(recursive, TRUE,  ("r", "recursive"), "Recursive", "Process directories recursively") \
+    X(verbose,   FALSE, ("V", "verbose"),   "Verbose",   "Print detailed processing info")
 
 #include "coloncli.h"
 ```
@@ -200,7 +200,7 @@ You can define these before `#include "coloncli.h"` to customize behavior:
 | `CCLI_LEGACY`       | `0`                                     | `0`, `1`     | Start in **legacy mode** (`1`) or colon mode (`0`) |
 | `CCLI_POSITIONAL`   | `0`                                     | `0`, `1`     | Start in **positional mode** (`1`) or not (`0`)    |
 | `CCLI_NAME`         | `CCLI` stringified                      | Any string   | Program **name** in help header/usage              |
-| `CCLI_HEADER`       | `"$name - Colon CLI"` | Any string      | Help **title** line                                |
+| `CCLI_HEADER`       | `"$name - Colon CLI"`                   | Any string   | Help **title** line                                |
 | `CCLI_USAGE`        | `"Usage: $name [OPTIONS] :: [ARGS...]"` | Any string   | Help **usage** line                                |
 | `CCLI_DESCRIPTION`  | `""`                                    | Any string   | Help **description**                               |
 | `CCLI_EXAMPLE`      | `""`                                    | Any string   | Help **examples** section                          |
@@ -215,9 +215,9 @@ You can define these before `#include "coloncli.h"` to customize behavior:
 | Macro                 | Arguments                                                                    | Purpose                               |
 | --------------------- | ---------------------------------------------------------------------------- | ------------------------------------- |
 | `CCLI_POS_ARGS(X, Y)` | `X(type, prop, name, label, desc)` / `Y(cap, type, prop, name, label, desc)` | Declare positional arguments          |
-| `CCLI_OPT_ARGS(X, Y)` | `X(type, prop, default, Y(keys...), label, desc)`                            | Declare optional arguments            |
-| `CCLI_BOL_ARGS(X, Y)` | `X(prop, default, Y(keys...), label, desc)`                                  | Declare boolean flags                 |
-| `Y(...)`              | `("short", "long")`, `("short", "short")`, `("long", "long")`                | Define short/long names (1-5 aliases) |
+| `CCLI_OPT_ARGS(X)`    | `X(type, prop, default, (keys...), label, desc)`                             | Declare optional arguments            |
+| `CCLI_BOL_ARGS(X)`    | `X(prop, default, (keys...), label, desc)`                                   | Declare boolean flags                 |
+| `(keys...)`           | `("short", "long")`, `("short", "short")`, `("long", "long")`                | Define short/long names (1-5 aliases) |
 
 ## Macro Signatures
 
@@ -246,13 +246,11 @@ You can define these before `#include "coloncli.h"` to customize behavior:
 
 ### CCLI_OPT_ARGS
 
-- **X:** (type: Type, prop: Identifier, default: Literal, keys: Aliases, label: String, desc: String)
-- **Y:** (...String)
+- **X:** (type: Type, prop: Identifier, default: Literal, keys: (Aliases), label: String, desc: String)
 
 ### CCLI_BOL_ARGS
 
-- **X:** (prop: Identifier, default: Bool, keys: Aliases, label: String, desc: String)
-- **Y:** (...String)
+- **X:** (prop: Identifier, default: Bool, keys: (Aliases), label: String, desc: String)
 
 ## Syntax reference
 
@@ -354,13 +352,13 @@ All option keys and flag names must be unique across both short and long names. 
 
 **Allowed:**
 
-- Keys are case-sensitive: `Y("d")` and `Y("D")` are different symbols.
-- A short key and its long alias (e.g. `Y("d", "dir")`) is the intended mechanism.
+- Keys are case-sensitive: `("d")` and `("D")` are different symbols.
+- A short key and its long alias (e.g. `("d", "dir")`) is the intended mechanism.
 
 **Avoid it:**
 
 - An option key and a boolean flag name sharing the same short/long name is undefined behavior.
-- An option/boolean using the same short/long name twice (e.g. `Y("d", "d")`) is undefined behavior.
+- An option/boolean using the same short/long name twice (e.g. `("d", "d")`) is undefined behavior.
 
 ## Undefined behavior
 
@@ -368,8 +366,8 @@ The following are undefined behavior:
 
 - Using a type other than `STRING`, `CHAR`, `UINT`, `INT` (empty falls back to `STRING`)
 - Empty `prop` name in any macro
-- Fewer than 1 or more than 5 aliases inside `Y(...)`
-- Empty string `""` as an alias inside `Y(...)`
+- Fewer than 1 or more than 5 aliases inside `(keys...)`
+- Empty string `""` as an alias inside `(keys...)`
 - Fewer than 5 arguments to `X` in `CCLI_POS_ARGS`
 - Fewer than 6 arguments to `Y` in `CCLI_POS_ARGS`
 - Fewer than 5 arguments to `X` in `CCLI_BOL_ARGS`
