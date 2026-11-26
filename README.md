@@ -379,3 +379,7 @@ The following are undefined behavior:
 ## License
 
 MIT.
+
+## Inspired
+
+The idea of macro-defined arguments processed by a single header was inspired by [esay-args](https://github.com/gouwsxander/easy-args#1-define-your-arguments).
